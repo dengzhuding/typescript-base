@@ -126,4 +126,3 @@ let o3 = {
 console.log('展开符：');
 console.dir(a3);
 console.dir(o3);
-
