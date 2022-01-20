@@ -1,6 +1,22 @@
 /**
  * 4. 函数
+ * 如何判断两个函数是兼容(可以赋值)的：
+ * a. 传入类型参数可以变少【因为函数调用可以忽略额外参数，所以可以变少】，不能变多；
+ * b. 返回类型可以变多不能变少【因为返回值可能会被用到里面的属性，所以不能变少】，类型系统强制源函数的返回值类型必须是目标函数返回值类型的子类型
+ * c. 对于有重载的函数，源函数的每个重载都要在目标函数上找到对应的函数签名
  */
+
+let func1: (p1: number, p2: string) => {p3: number} = (p1, p2) => ({p3: 0});
+let func2: (p1: number, p2: string) => {p3: number, p4: string} = (p1, p2) => ({p3: 0, p4: ''});
+let func3: (p1: number) => {p3: number} = (p1) => ({p3: 0, p4: ''});
+let func4: (p1: number) => {p3: number, p4: string} = (p1) => ({p3: 0, p4: ''});
+func1 = func2; // ok - 新函数返回变多了
+// func2 = func1; // error - 新函数返回变少了，不兼容
+func2 = func4; // ok - 新函数参数变少了
+// func4 = func2;  // error - 新函数参数变多了，不兼容
+
+
+
 
 // named function
 function add (x: number, y: number): number {

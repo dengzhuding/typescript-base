@@ -1,7 +1,18 @@
 /**
  * 6. 枚举 - 可以i当以一些带名字的常量；Typescript支持数字的和基于字符串的枚举
  * 使用枚举：通过枚举的属性来访问枚举成员，和枚举的名字来访问枚举类型
+ * 
+ * 枚举兼容性：
+ * 枚举类型与数字类型兼容，并且数字类型与枚举类型兼容。不同枚举类型之间是不兼容的
  */
+
+//  枚举兼容性
+enum Status { Ready, Waiting };
+enum Color2 { Red, Blue, Green };
+let status2 = Status.Ready;
+// status2 = Color2.Red; // error: 不同枚举类型不兼容
+status2 = Status.Waiting; // ok
+status2 = 3; // ok
 
 enum Direction {
   Up = 1, // 初始化为1（不初始化从0开始），其余成员从1自动增长
