@@ -15,7 +15,7 @@ printLabel(myObj);
 // 接口重写
 interface LabeldValue {
   label: string;
-  color?: string; // 可选属性：对可能存在的属性预定义；可以捕获引用了不存在的属性时的错误
+  color?: string; // 可选属性：对可能存在的属性预定义；可以捕获引用了不存在的属性时的错误; 使用了--strictNullChecks,可选参数会被自动地加上【 | undefined】
   readonly x: number; // 只读属性：只能在对象创建的时候修改其值
   [propName: string]: any; //索引签名：这里表示可以有任意数量的属性
 }
