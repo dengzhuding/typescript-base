@@ -454,19 +454,81 @@ type ReturnType3<T extends AnyFunction> =
  */ 
 
 /**
- * 实用工具类型
- * Partial<T> ，TypeScript 2.1 
+ * 实用工具类型(全局可用)
+ * Partial<T> ，TypeScript 2.1
  * Readonly<T> ，TypeScript 2.1 
  * Record<K,T> ，TypeScript 2.1 
  * Pick<T,K> ，TypeScript 2.1 
  * Exclude<T,U> ，TypeScript 2.8 
  * Extract<T,U> ，TypeScript 2.8 
- * NonNullable<T> ，TypeScript 2.8 
- * ReturnType<T> ，TypeScript 2.8 
- * InstanceType<T> ，TypeScript 2.8 
- * Required<T> ，TypeScript 2.8 
- * ThisType<T> ，TypeScript 2.8
- * 
+ * NonNullable<T> ，TypeScript 2.8    - 从类型 T 中剔除 null 和 undefined ，然后构造一个类型
+ * ReturnType<T> ，TypeScript 2.8     - 由函数类型 T 的返回值类型构造一个类型
+ * InstanceType<T> ，TypeScript 2.8   - 由构造函数类型 T 的实例类型构造一个类型
+ * Required<T> ，TypeScript 2.8       - 构造一个类型，使类型 T 的所有属性为 required
+ * ThisType<T> ，TypeScript 2.8   - 这个工具不会返回一个转换后的类型。它做为上下文的 this 类型的一个标记。
+ *                                  注 意，若想使用此类型，必须启用 --noImplicitThis 。
  * 所有Api都可以从官网了解：https://www.typescriptlang.org/docs/handbook/
  */
+interface Todo {
+  title: string,
+  description: string
+}
 
+function updateTodo(todo: Todo, fieldsToUpdate: Partial<Todo>): Todo { // Partial<T> - 构造类型T,并将它所有的属性设置为可选的
+  return {...todo, ...fieldsToUpdate}
+}
+let toDoItem: Todo = {
+  title: "",
+  description: ""
+}
+let newToDoItem = updateTodo(toDoItem, {title: '1'})
+
+let readonlyTodo: Readonly<Todo> = { // Readonly<T> - 构造类型T,并将它所有的属性设置为只读的
+  title: "",
+  description: ""
+}
+// readonlyTodo.title = '2'; // error: 无法分配到 "title" ，因为它是只读属性
+function freeze<T>(obj: T): Readonly<T> { // 返回冻结的对象
+  return Object.freeze(obj);
+}
+
+type Timer = '9: 00' | '10: 00' | '11: 00';
+let todoList: Record<Timer, Todo> = { // Record<K, T> - 构造一个类型，其属性类型为K，属性值类型为T
+  "9: 00": toDoItem,
+  "10: 00": toDoItem,
+  "11: 00": toDoItem
+}
+
+let littleTodo: Pick<Todo, 'title'> = { // Pick<T, K> - 从类型T中挑选部分属性K来构造类型
+  title: ""
+}
+
+// Exclude<T, U> - 从类型T中剔除可以赋值给U的属性，然后构造一个类型
+type T17 = Exclude<'a' | 'b' | 'c' | 'd', 'a'>; // "b" | "c" | "d"
+
+// Extract<T, U> - 从类型 T 中提取所有可以赋值给 U 的类型，然后构造一个类型
+type T18 = Extract<'a' | 'b' | 'c' | 'd', 'a'>; // "a"
+
+// ThisType<T> - 在 lib.d.ts 里， ThisType<T> 标识接口是个简单的空接口声明。
+// 除了在被识别 为对象字面量的上下文类型之外，这个接口与一般的空接口没有什么不同。
+type ObjectDescriptor<D, M> = {
+  data?: D,
+  methods?: M & ThisType<D & M> // Marker for contextual 'this' type - 上下文“this”类型的标记，这里说明this是D & M类型
+}
+function makeObject<D, M>(des: ObjectDescriptor<D, M>): D & M {
+  let data: object = des.data || {};
+  let methods: object = des.methods || {};
+  return {...data, ...methods} as D & M;
+}
+let myObj3 = makeObject({
+  data: {x: 0, y: 0},
+  methods: {
+    moveBy(dx: number, dy: number) {
+      this.x += dx; // this 被识别为D & M类型，如果上面不添加ThisType<D & M>，就会识别为{moveBy(dx: number, dy: number): void}类型
+      this.y += dy;
+    }
+  }
+})
+
+myObj3.moveBy(2, 3);
+console.dir(myObj3); // { x: 2, y: 3, moveBy: [Function: moveBy] }
