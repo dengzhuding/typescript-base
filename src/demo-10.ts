@@ -123,6 +123,37 @@ let color: Color = Color.mixColor('yellow');
 console.log(color);
 
 // 10.4 非法的合并 - 目前，类不能与其他类或变量合并，可以使用Typescript的混入（mixin）模仿类的合并
+// 基本思路是使用implements，把类当作接口，仅使用类型而非实现，目的是将minxin进来的属性方法创建处占位属性
+class ClassA {
+  name: string;
+  getName(): string {
+    return this.name;
+  }
+}
+class ClassB {
+  status: boolean = true;
+}
+class ClassAB implements ClassA, ClassB {
+  name: string;
+  getName: () => string;
+  status: boolean = true;
+  constructor(name: string) {
+    this.name = name;
+  }
+}
+function applyMinxins(derivedCtor: any, baseCtors: any[]) {
+  baseCtors.forEach(baseCtor => {
+    // baseCtor - 想合并的类
+    Object.getOwnPropertyNames(baseCtor.prototype).forEach(name => {
+      // name -成员名称
+      Object.defineProperty(derivedCtor.prototype, name, <PropertyDescriptor>Object.getOwnPropertyDescriptor(baseCtor.prototype, name))
+    })
+  })
+}
+applyMinxins(ClassAB, [ClassA, ClassB]);
+let ab = new ClassAB('Bob');
+console.dir(ab.getName());
+console.dir(ab.status);
 
 // 10.5 模块拓展 - 虽然Javascript不支持合并，但你可以为导入的对象打补丁以更新它们
 import {Observable} from './lib/test-observable';
