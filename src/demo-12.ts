@@ -90,7 +90,7 @@ let parameterDecorator: ParameterDecorator = function (target, propertyKey, para
 console.log('类中不同声明上的装饰器应用顺序：')
 
 @classDecorator // 类装饰
-class C {
+export class C {
   @propertyDecorator // 属性属性装饰
   public name: string;
   @Reflect.metadata('key', 'A') // 设置元数据的工厂

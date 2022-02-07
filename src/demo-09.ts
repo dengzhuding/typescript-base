@@ -1,5 +1,5 @@
-/// <reference path="./lib/test-module.d.ts" / >
-/// <reference path="./lib/my-node.d.ts" / >
+/// <reference path="./lib/test-module.d.ts" />
+/// <reference path="./lib/my-node.d.ts" />
 
 /**
  * 9. 模块 - 模块在其自身的作用域里执行，而不是全局作用域；
