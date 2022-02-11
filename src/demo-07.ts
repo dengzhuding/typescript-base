@@ -408,8 +408,8 @@ type T9 = NonFunctionProperties<TPart>; // {p1: string;}
 
 type MyReturnType<T> = // 获取函数类型的返回类型,标准库以实现- ReturnType<T>
 T extends (...arg: any[]) => infer R ? R : any; // R - 待推断的类型变量
-declare function f3(): {a: number, b: string};
-type f2ReturnTtpe = MyReturnType<typeof f3>; // {{a: number, b: string}
+declare function f5(): {a: number, b: string};
+type f2ReturnTtpe = MyReturnType<typeof f5>; // {{a: number, b: string}
 
 type Unpacked<T> = 
   T extends (infer U)[] ? U: // 匹配到数组 - U[]，返回U类型

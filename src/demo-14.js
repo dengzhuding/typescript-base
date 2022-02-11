@@ -222,3 +222,11 @@ function getFirstStr(str) {
   return str.substring(0, 1);
 }
 console.log(getFirstStr('hello'));
+
+// 如果一个函数的函数体内有对 arguments 的引用，那么这个函数会隐式地被认为 具有一个var-arg参数（比如: (...arg: any[]) => any )）。使用JSDoc的var- arg语法来指定 arguments 的类型。
+/** @param {...number} args - 指定arguments成员的类型 */
+function sum() {
+  let total = Array.from(arguments).reduce((pre, cur) => pre + cur, 0);
+  return total;
+}
+console.log(sum(1, 2, 3, 4));
