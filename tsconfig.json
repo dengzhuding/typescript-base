@@ -46,8 +46,10 @@
     // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
     // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
+    // 默认所有可见的@types包会在编译过程中包含进来，如果指定了typeRoots，则只有typeRoots下面的包才会包含进来
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
-    "types": [],                           /* Type declaration files to be included in compilation. */
+    // 如果指定了types,只有被列出来的包才会被包含进来，指定为[]来禁用自动引入@types包
+    "types": ["mocha"],                           /* Type declaration files to be included in compilation. */
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
     "esModuleInterop": true,                  /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
@@ -67,7 +69,30 @@
     "skipLibCheck": true,                     /* Skip type checking of declaration files. */
     "forceConsistentCasingInFileNames": true  /* Disallow inconsistently-cased references to the same file. */
   },
+
+  // 使用includes引入的文件可以使用exclude属性过滤
   // "include": [
   //   "src/**/*.ts"
   // ]
+
+  // exclude默认会排除node_modules,bower_components,jspm_packages,outBir目录
+  // "exclude": [],
+
+  // 通过files属性明确指定的文件总是会被包含在内，不管exclude如何设置
+  // files: [],
+
+  // 注意编译器不会去引入那些可能作为输出的文件（比如包含了index.ts,把么index.d.ts和index.js会排除在外）
+  
+  // 使用extends属性继承配置，相对路径在解析时相对于所在文件
+  // "extends": "",
+
+  // 让IDE在保存文件时根据tsconfig.json重写生成文件（需要安装atom-typescript插件）
+  // "compileOnSave": true,
+  
+  // 指明要引用的工程: 每个引用的 path 属性都可以指向到包含 tsconfig.json 文件的目录，或者直接 指向到配置文件本身（名字是任意的）
+  "references": [
+    // {
+    //   "path": "../src"
+    // }
+  ]
 }

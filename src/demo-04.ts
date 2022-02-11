@@ -69,7 +69,7 @@ console.log('card', card);
 // const picker2 = createCardPicker();
 // console.log('card2', picker2());
 
-function test(this: Window) { // 这里的this参数编译后js会删掉，仅用作类型推断
+function test1(this: Window) { // 这里的this参数编译后js会删掉，仅用作类型推断
 // function test() { // 设置了noImplicitThis: true: "this" 隐式具有类型 "any"时警告
   console.log(this)
 }
